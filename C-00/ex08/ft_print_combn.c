@@ -11,39 +11,71 @@
 /* ************************************************************************** */
 
 #include <unistd.h>
-#include <math.h>
 
-void	ft_putchar(char c)
+int	ft_strlen(char *str)
 {
-	write(1, &c, 1);
+	int	i;
+
+	i = 0;
+	while (str[i])
+		++i;
+	return (i);
+}
+
+void	print_digits(int *digits, int size)
+{
+	int		i;
+	char	to_print;
+
+	if (size == 0)
+		return ;
+	i = 0;
+	while (i < size)
+	{
+		to_print = digits[i] + '0';
+		write(1, &to_print, 1);
+		++i;
+	}
+	write(1, "\n", 1);
+}
+
+void	recu(int n, int i, int depth, int *digits)
+{
+	if (depth == n)
+		return (print_digits(digits, n));
+	if (10 - i < n - depth)
+		return ;
+	while (i <= 9)
+	{
+		digits[depth] = i;
+		++i;
+		recu(n, i, depth + 1, digits);
+	}
 }
 
 void	ft_print_combn(int n)
 {
-	int a[n];
-	int i;
-	int j;
-	int k;
+	int	digits[10];
 
-	i = 0;
-	j = 0;
-	a[i] = 0;
-	for (a[i] = 0, a[i]++ , (10 - (n - i)))
+	recu(n, 0, 0, digits);
+	write(1, "\n", 1);
+}
+
+int	main(int ac, char **av)
+{
+	int	nb;
+
+	if (ac != 2)
 	{
-		a[(i + 1)] = a[i] + 1;
-:q
-
-
-
-
-		for (j = 0, j++, (n-1))
-		{
-			ft_putchar(a[j]);
-		}
+		write(1, "need a digit as parameter\n", 26);
+		return (1);
 	}
-
-			
-			
-
-
+	nb = av[1][0] - '0';
+	if (ft_strlen(av[1]) > 1 || nb < 0 || nb > 9)
+	{
+		write(1, "enter a digit plz\n", 18);
+		return (1);
+	}
+	ft_print_combn(nb);
+	return (0);
 }
